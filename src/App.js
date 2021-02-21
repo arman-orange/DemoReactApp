@@ -98,7 +98,7 @@ function App() {
 
             <input
                 type="button"
-                value='Add'
+                value='Create New'
                 onClick={handleAddInput}
             />
 
