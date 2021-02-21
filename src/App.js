@@ -6,12 +6,13 @@ function App() {
 
     const [inputList, setInputList] = useState([
         {
-            email: 'test1',
-            password: '1233'
+            email: '',
+            password: '',
         },
     ]);
 
-    const [disableInput, setDisableInput] = useState(true);
+
+    const [disableInput, setDisableInput] = useState([]);
 
     const handleChange = (e, index) => {
         const {name, value} = e.target;
@@ -19,9 +20,8 @@ function App() {
         list[index][name] = value;
 
         setInputList(list);
-        console.log(inputList.email);
-        console.log(inputList.password);
     }
+
 
     const handleAddInput = () => {
         setInputList([...inputList, {
@@ -36,9 +36,24 @@ function App() {
         setInputList(list);
     }
 
+
     const handleToggleDisable = (index) => {
-        const list = [...inputList];
+
+        if(disableInput.includes(index))
+        {
+            setDisableInput(disableInput.filter(item => item !== index));
+            // console.log(disableInput.includes(index));
+        }
+
+        else if(!disableInput.includes(index))
+        {
+            setDisableInput(disableInput.concat(index));
+            // console.log(disableInput.includes(index));
+        }
+
+
     }
+
 
     return (
         <>
@@ -51,7 +66,7 @@ function App() {
                             placeholder='Enter email'
                             className='mr10'
                             value={item.email}
-                            disabled={disableInput}
+                            disabled={disableInput.includes(i)}
                             onChange={e => {handleChange(e, i)}}
                         />
                         <input
@@ -60,41 +75,36 @@ function App() {
                             placeholder='Enter Password'
                             className='mr10'
                             value={item.password}
+                            disabled={disableInput.includes(i)}
                             onChange={e => {handleChange(e, i)}}
                         />
 
-                        {
-                            inputList.length !== 1 &&
-                            <input
-                                type="button"
-                                value='Remove'
-                                className='mr10'
-                                onClick={() => {handleRemoveInput(i)}}
-                            />
-                        }
-
-                        {
-                            inputList.length - 1 === i
-                                &&
-                            <input
-                                type="button"
-                                value='Add'
-                                onClick={handleAddInput}
-                            />
-                        }
+                        <input
+                            type="button"
+                            value='Remove'
+                            className='mr10'
+                            onClick={() => {handleRemoveInput(i)}}
+                        />
 
                         <input
                             type="button"
-                            value='Disable Enable'
+                            value={(disableInput.includes(i)) ? 'Enable' : 'Disable'}
                             onClick={() => { handleToggleDisable(i)}}
                         />
                     </div>
+
                 );
             })}
 
-            <pre>
-                {JSON.stringify(inputList, null, 2)}
-            </pre>
+            <input
+                type="button"
+                value='Add'
+                onClick={handleAddInput}
+            />
+
+            {/*<pre>*/}
+            {/*    {JSON.stringify(inputList, null, 2)}*/}
+            {/*</pre>*/}
         </>
     );
 }
